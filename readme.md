@@ -9,6 +9,8 @@ The `category id` is saved - not the category name.
 
 On saving an entry, the 'real' category will be automatically selected as well. This allows template interaction with the fieldtype tag, and the use of normal category tags. It also has the added benefit of allowing you to use the category search in the CP Edit tab.
 
+It is recommended that you 'hide' the categories tab when using this FieldType, as the field overwrites category selections for the entry on save.
+
 Requirements
 ------------
 
