@@ -19,6 +19,7 @@ Version
 * Now EE Multiple Site Manager (MSM) compatible
 * Fixed a bug where only 1 category was saved to categories table even if multiple SC Category Select fields were used on the publish form
 * Fixed some minor bugs
+* Thanks to Mike Gallagher for his help with testing
 
 ###1.0 
 
