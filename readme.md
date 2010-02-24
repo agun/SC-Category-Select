@@ -53,8 +53,8 @@ To display the category id, use the custom field tag as normal for the SC Cateog
 You can also display the category heading, description and url_title using (will return blank if nothing exists):
 
 	<p>Category heading - {my_custom_sc_category_select_field:heading}.</p>
-	<p>Category heading - {my_custom_sc_category_select_field:description}.</p>
-	<p>Category heading - {my_custom_sc_category_select_field:url_title}.</p>
+	<p>Category description - {my_custom_sc_category_select_field:description}.</p>
+	<p>Category url_title - {my_custom_sc_category_select_field:url_title}.</p>
 	
 ### Please note!
 
