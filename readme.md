@@ -1,15 +1,28 @@
-SC Category Select 1.0
+SC Category Select 1.1
 ================
 
 Author: [Andrew Gunstone][1] ([Email][2]) - [Thirst Studios][3]
 
 SC Category Select is a [Pixel&Tonic's FieldFrame][4] FieldType which displays selected category options in a drop-down list. It only allows selection of a single category. You can select multiple category groups. The FieldType respects sub-categories.
 
-The `category id` is saved - not the category name.
+The `category id` is saved - not the category name - however you can display the heading, description and url_title using some custom functions.  See "Usage" below for details.
 
-On saving an entry, the 'real' category will be automatically selected as well. This allows template interaction with the fieldtype tag, and the use of normal category tags. It also has the added benefit of allowing you to use the category search in the CP Edit tab.
+On saving an entry, the 'real' category will be automatically selected as well, for ALL SC Category Select fields listed on the publish form... even those in a FF Matrix.  This allows template interaction with the fieldtype tag, and the use of normal category tags. It also has the added benefit of allowing you to use the category search in the CP Edit tab.
 
-It is recommended that you 'hide' the categories tab when using this FieldType, as the field overwrites category selections for the entry on save.
+It is recommended that you 'hide' the categories tab when using this FieldType, as the add-on overwrites category selections for the entry on save.
+
+Version
+------------
+###1.1
+
+* Now FieldFrame Matrix compatible
+* Now EE Multiple Site Manager (MSM) compatible
+* Fixed a bug where only 1 category was saved to categories table even if multiple SC Category Select fields were used on the publish form
+* Fixed some minor bugs
+
+###1.0 
+
+* Initial release
 
 Requirements
 ------------
@@ -41,6 +54,8 @@ Using this FieldType is easy.
 Create a new Weblog Custom Field as usual. Select SC Category Select from the Field Type dropdown.
 
 Select one or more Category Groups from the multi-select list.
+
+You can also use this field type with FieldFrame Matrix.
 
 Finish entering all other details for the Custom Field and save it!
 

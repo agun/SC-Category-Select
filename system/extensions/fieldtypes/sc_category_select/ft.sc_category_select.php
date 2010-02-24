@@ -13,12 +13,42 @@ if ( ! defined('EXT')) exit('Invalid file request');
 class Sc_category_select extends Fieldframe_Fieldtype {
  	
 	var $info = array(
-			'name'             => 'SC Category Select',
-			'version'          => '1.0',
-			'desc'             => 'Creates a select menu from a selected EE category',
-			'docs_url'         => 'http://sassafrasconsulting.com.au/software/category-select'
-			);
+		'name'             => 'SC Category Select',
+		'version'          => '1.1',
+		'desc'             => 'Creates a select menu from a selected EE category',
+		'docs_url'         => 'http://sassafrasconsulting.com.au/software/category-select'
+	);
+
+	var $hooks = array(
+		'submit_new_entry_absolute_end'
+	);
+	
+	var $cache = array();
+
  	var $postpone_saves = TRUE;
+
+	/**
+	 * On saving an entry, delete all categories for this post, then add in categories
+	 * from all SC Category Select fields
+	 *
+	 * @param  int  $entry_id      The entry id
+	 * @return nothing
+	 */
+	function submit_new_entry_absolute_end($entry_id)
+	{
+		global $DB;
+		$DB->query("DELETE FROM exp_category_posts WHERE entry_id = $entry_id");
+		if (isset($this->cache['cat_id']) AND $this->cache['cat_id'] != '')
+		{
+			$sql = '';
+			$cat_ids = explode(',', trim($this->cache['cat_id'],','));
+			$cat_ids = array_unique($cat_ids);
+			foreach ($cat_ids AS $id):
+				$sql .= "($id, $entry_id),";
+			endforeach;
+			$DB->query("INSERT INTO exp_category_posts (cat_id, entry_id) VALUES ".trim($sql,','));				
+		}
+	}
  
 	/**
 	 * Display Field
@@ -103,11 +133,7 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	 */
 	function save_field($field_data, $field_settings, $entry_id)
 	{
-		global $DB;
-
-		$DB->query("DELETE FROM exp_category_posts WHERE entry_id = $entry_id");
-		if (is_numeric($field_data))
-			$DB->query("INSERT INTO exp_category_posts (cat_id, entry_id) VALUES ($field_data, $entry_id)");
+		$this->cache['cat_id'] .= $field_data.",";
 		return $field_data;
 	}
 
@@ -118,9 +144,9 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	 * @param  array   $cell_settings  The cell's settings
 	 * @return string  Modified $cell_data
 	 */
-	function save_cell($cell_data, $cell_settings)
+	function save_cell($cell_data, $cell_settings, $entry_id)
 	{
-		return $this->save_field($cell_data, $cell_settings);
+		return $this->save_field($cell_data, $cell_settings, $entry_id);
 	}
 
 	/**
@@ -144,9 +170,9 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	 */
 	function save_cell_settings($cell_settings)
 	{
-		$this->save_field_settings($cell_settings);
+		return $this->save_field_settings($cell_settings);
 	}
-
+	
 	/**
 	 * List all select options
 	 * 
@@ -158,6 +184,7 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	function _input_select_options($parent_id,$level,$group_id,$field_data)
 	{
 		global $DSP, $DB;
+				
 		// fetch all categories
 		$categories = $DB->query("SELECT cat_id, cat_name, parent_id, group_id, (SELECT COUNT(cat_id) FROM exp_categories WHERE parent_id = tblCat.cat_id) AS children FROM exp_categories tblCat WHERE parent_id = $parent_id  AND group_id IN ($group_id) ORDER BY group_id, cat_order");
 		$r = '';
@@ -201,19 +228,19 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	function _select_category($options)
 	{
 		global $DB, $PREFS;
-		$options = explode(",", $options);
 
+		$site_id = $PREFS->ini('site_id');
+		$options = explode(",", $options);
 		$block = "<div class='itemWrapper'><select name=\"options[]\" multiple=\"multiple\" style=\"width:45%\" >";
 		
 		$selected = (in_array(0, $options)) ? " selected=\"true\"" : "";
 		$block .= "<option value=\"0\"$selected>None</option>";
 
-		$dls = $DB->query("SELECT group_id, group_name FROM exp_category_groups ORDER BY group_name ASC");
-		foreach($dls->result as $dl)
-		{
+		$dls = $DB->query("SELECT group_id, group_name FROM exp_category_groups WHERE site_id = $site_id ORDER BY group_name ASC");
+		foreach($dls->result as $dl):
 			$selected = (in_array($dl['group_id'], $options)) ? " selected=\"true\"" : "";
 			$block .= "<option value=\"{$dl['group_id']}\"$selected>{$dl['group_name']}</option>";
-		}
+		endforeach;
 		
 		$block .= "</select></div></div>";
 		
