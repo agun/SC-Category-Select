@@ -1,4 +1,4 @@
-SC Category Select 1.1
+SC Category Select 1.1.2
 ================
 
 Author: [Andrew Gunstone][1] ([Email][2]) - [Thirst Studios][3]
@@ -13,6 +13,11 @@ It is recommended that you 'hide' the categories tab when using this FieldType, 
 
 Version
 ------------
+###1.1.2
+
+* Fixed a bug when saving with no category selected
+* Added some LG Addon Updater goodness
+
 ###1.1
 
 * Now FieldFrame Matrix compatible
