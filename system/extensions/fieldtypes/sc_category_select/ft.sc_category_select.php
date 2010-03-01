@@ -14,9 +14,10 @@ class Sc_category_select extends Fieldframe_Fieldtype {
  	
 	var $info = array(
 		'name'             => 'SC Category Select',
-		'version'          => '1.1',
+		'version'          => '1.1.2',
 		'desc'             => 'Creates a select menu from a selected EE category',
-		'docs_url'         => 'http://sassafrasconsulting.com.au/software/category-select'
+		'docs_url'         => 'http://sassafrasconsulting.com.au/software/category-select',
+		'versions_xml_url' => 'http://sassafrasconsulting.com.au/versions.xml'
 	);
 
 	var $hooks = array(
@@ -24,8 +25,6 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	);
 	
 	var $cache = array();
-
- 	var $postpone_saves = TRUE;
 
 	/**
 	 * On saving an entry, delete all categories for this post, then add in categories
@@ -131,10 +130,11 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	 * @param  int     $entry_id	    The entry id
 	 * @return string  Modified $field_data
 	 */
-	function save_field($field_data, $field_settings, $entry_id)
+	function save_field($field_data, $field_settings)
 	{
-		$this->cache['cat_id'] .= $field_data.",";
-		return $field_data;
+		$this->cache['cat_id'] .= ",".$field_data;
+		$this->cache['cat_id'] = trim($this->cache['cat_id'],",");
+		return trim($field_data);
 	}
 
 	/**
@@ -144,9 +144,9 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	 * @param  array   $cell_settings  The cell's settings
 	 * @return string  Modified $cell_data
 	 */
-	function save_cell($cell_data, $cell_settings, $entry_id)
+	function save_cell($cell_data, $cell_settings)
 	{
-		return $this->save_field($cell_data, $cell_settings, $entry_id);
+		return $this->save_field($cell_data, $cell_settings);
 	}
 
 	/**
