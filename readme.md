@@ -1,4 +1,4 @@
-SC Category Select 1.1.2
+SC Category Select 1.1.3
 ================
 
 Author: [Andrew Gunstone][1] ([Email][2]) - [Thirst Studios][3]
@@ -13,6 +13,10 @@ It is recommended that you 'hide' the categories tab when using this FieldType, 
 
 Version
 ------------
+###1.1.3
+
+* Fixed a bug when saving "normal" categories on publish forms with no SC Category Select field.
+
 ###1.1.2
 
 * Fixed a bug when saving with no category selected
