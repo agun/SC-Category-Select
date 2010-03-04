@@ -14,7 +14,7 @@ class Sc_category_select extends Fieldframe_Fieldtype {
  	
 	var $info = array(
 		'name'             => 'SC Category Select',
-		'version'          => '1.1.2',
+		'version'          => '1.1.3',
 		'desc'             => 'Creates a select menu from a selected EE category',
 		'docs_url'         => 'http://sassafrasconsulting.com.au/software/category-select',
 		'versions_xml_url' => 'http://sassafrasconsulting.com.au/versions.xml'
@@ -36,7 +36,11 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	function submit_new_entry_absolute_end($entry_id)
 	{
 		global $DB;
-		$DB->query("DELETE FROM exp_category_posts WHERE entry_id = $entry_id");
+
+		if (isset($this->cache['cat_del']) AND $this->cache['cat_del'] == 'true')
+		{
+			$DB->query("DELETE FROM exp_category_posts WHERE entry_id = $entry_id");
+		}
 		if (isset($this->cache['cat_id']) AND $this->cache['cat_id'] != '')
 		{
 			$sql = '';
@@ -132,6 +136,7 @@ class Sc_category_select extends Fieldframe_Fieldtype {
 	 */
 	function save_field($field_data, $field_settings)
 	{
+		$this->cache['cat_del'] = 'true';
 		$this->cache['cat_id'] .= ",".$field_data;
 		$this->cache['cat_id'] = trim($this->cache['cat_id'],",");
 		return trim($field_data);
